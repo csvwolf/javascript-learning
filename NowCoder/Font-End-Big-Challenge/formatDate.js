@@ -5,7 +5,7 @@
  *
  * Function: 按所给的时间格式输出指定的时间
  *
- * Numbers Of Method:
+ * Numbers Of Method: 2
  */
 /**
  * @param {Date} oDate
@@ -24,6 +24,7 @@ var formatDate = function(oDate, sFormation) {
     var date = oDate,
         week = ['日', '一', '二', '三', '四', '五', '六'];
 
+    // 这是为了测试OJ不通过原因的function,还是觉得用上面的方法比较好
     var formatToLeadingZero = function(num) {
         if (num < 10) {
             return '0' + num;
@@ -32,6 +33,7 @@ var formatDate = function(oDate, sFormation) {
         }
     };
 
+    // 格式化生成
     var format = {
         yyyy: date.getFullYear(),
         yy: date.getFullYear().toString().substring(2),
@@ -49,8 +51,9 @@ var formatDate = function(oDate, sFormation) {
         s: date.getSeconds(),
         w: week[date.getDay()]
     };
+/*
 
-/*    return sFormation.replace(/yyyy/ig, format.yyyy)
+    return sFormation.replace(/yyyy/ig, format.yyyy)
                      .replace(/yy/ig, format.yy)
                      .replace(/MM/ig, format.MM)
                      .replace(/M/ig, format.M)
@@ -64,11 +67,13 @@ var formatDate = function(oDate, sFormation) {
                      .replace(/m/ig, format.m)
                      .replace(/ss/ig, format.ss)
                      .replace(/s/ig, format.s)
-                     .replace(/w/ig, format.w);*/
+                     .replace(/w/ig, format.w);
+*/
 
+
+    // 无法通过yyMd这种类型,但通过了牛客网的OJ,只有在有分隔符时可以正常工作
     return sFormation.replace(/[a-z]+/ig, function($1) { return format[$1] } );
 
 };
-
-console.log(formatDate(new Date(1453692967983), 'yy-M-d H:m:s 星期w'));
-console.log((/[a-z]+/i).exec("Hello"));
+// 所有方法有一个共同的问题,没有办法通过以下测试,s和d都会被替换(不过一般不会这么玩)
+console.log(formatDate(new Date(1453692967983), 'yesterday is 星期w'));
