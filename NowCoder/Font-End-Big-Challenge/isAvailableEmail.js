@@ -13,8 +13,8 @@
  * @returns {boolean}
  */
 var isAvailableEmail = function(sEmail) {
-    // {1,3}不能有空格,需要匹配多级域名
-    return /^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9_\.\-]+(\.[a-zA-Z0-9_\-]+){1,4}$/.test(sEmail);
+    // {1,3}不能有空格,需要匹配多级域名,在[]内没有必要转义
+    return /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9_.-]+(\.[a-zA-Z0-9_-]+){1,4}$/.test(sEmail);
 };
 
-console.log(isAvailableEmail('skyao123@qq.com'));
+console.log(isAvailableEmail('skyao.-123@qq.com'));
