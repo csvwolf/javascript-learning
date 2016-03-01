@@ -32,7 +32,7 @@ var isPowerOfThree2 = function(n) {
         return n % 3 === 0;
     }
 
-    return isPowerOfThree(n / 3);
+    return arguments.callee(n / 3);
 };
 
 var isPowerOfThreeNotWork = function(n) {
@@ -41,4 +41,4 @@ var isPowerOfThreeNotWork = function(n) {
      return (Math.log(n) / Math.log(3)) % 1 === 0;
 };
 
-console.log(isPowerOfThree(28));
+console.log(isPowerOfThree2(3.1));
