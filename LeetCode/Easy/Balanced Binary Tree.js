@@ -5,7 +5,7 @@
  *
  * Function: Given a binary tree, determine if it is height-balanced.
  *
- * Numbers Of Method:
+ * Numbers Of Method: 1
  *
  * Problem Link: https://leetcode.com/problems/balanced-binary-tree/
  */
