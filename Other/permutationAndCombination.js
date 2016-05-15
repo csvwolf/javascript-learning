@@ -35,13 +35,14 @@ var swap = function(arr, i, j) {
  * @param j
  */
 var canSwap = function(arr, i, j) {
+    //console.log('slice', arr.slice(i, j), arr[j]);
     return arr.slice(i, j).indexOf(arr[j]) === -1;
 };
 
 /**
  * 全排列使用的是递归交换数组中的数字
  * @param listArr
- * @param start
+ * @param start 开始的值，调用时输入0
  * @param callback
  */
 var permutate = function(listArr, start, callback) {
@@ -59,6 +60,12 @@ var permutate = function(listArr, start, callback) {
     }
 };
 
+/**
+ * 去重的全排列
+ * @param listArr
+ * @param start
+ * @param callback
+ */
 var permutateWithoutTheSame = function(listArr, start, callback) {
     var i,
         length = listArr.length;
@@ -67,6 +74,7 @@ var permutateWithoutTheSame = function(listArr, start, callback) {
         callback(listArr);
     } else {
         for (i = start; i < length; i++) {
+            // 检测是否需要交换
             if (canSwap(listArr, start, i)) {
                 swap(listArr, start, i);
                 arguments.callee(listArr, start + 1, callback);
@@ -77,7 +85,7 @@ var permutateWithoutTheSame = function(listArr, start, callback) {
 };
 
 /**
- * 组合
+ * 全组合
  * 组合的思路是通过二进制编码表示value的有无达到列出全部组合的效果。
  * @param listArr
  * @param callback
@@ -105,14 +113,176 @@ var combinate = function(listArr, callback) {
 
         callback(result);
     }
-
-
 };
 
-permutateWithoutTheSame(['a', 'b', 'b'], 0, function(arr) {
-    console.log(arr.join(''));
-});
+/**
+ * 部分组合
+ * 我们不需要全部的组合，只需要指定selectNum个空去进行组合
+ * @param listArr
+ * @param selectNum
+ * @param callback
+ */
+var combinateWithoutAll = function(listArr ,selectNum, callback) {
+    var listCount = [], // 计数器数组
+        result = [],
+        length = listArr.length,
+        oneCount = 0,   // 统计出现过的1
+        i,
+        canPrint = true;
 
-combinate(['a', 'b', 'c'], function(result) {
-    console.log(result);
+    init(listCount, selectNum, length - 1);
+
+    while (checkEnd(listCount, selectNum)) {
+        store(listArr, listCount, result);
+
+        if (canPrint) {
+            callback(result);
+        }
+
+        canPrint = true;
+
+        for (i = 0; i < length; i++) {
+
+            if (listCount[i] === 0 && oneCount !== 0) {
+
+                listCount[i - 1] = 0;
+                listCount[i] = 1;
+
+                // 去除重复的无用项
+                if (!canSwap(listArr, 0, i)) {
+                    canPrint = false;
+                }
+                //console.log('before', listCount);
+
+                init(listCount, oneCount - 1, i - 2);
+                oneCount = 0;
+                break;
+
+            } else if (listCount[i] === 1) {
+                oneCount++;
+            }
+
+        }
+    }
+
+
+    store(listArr, listCount, result);
+    callback(result);
+
+    /**
+     * 对 0 / 1结构进行初始化
+     * 前num个为 1
+     * 直到end为止为0
+     * @param listCount
+     * @param num
+     * @param end
+     */
+    function init (listCount, num, end) {
+        var i = 0;
+        for (i = 0; i < num; i++) {
+            listCount[i] = 1;
+        }
+
+        for (; i <= end; i++) {
+            listCount[i] = 0;
+        }
+    }
+
+    /**
+     * 存储结果
+     * @param listArr
+     * @param listCount
+     * @param result
+     */
+    function store(listArr, listCount, result) {
+        var length = listCount.length,
+            i,
+            j = 0;
+
+        for (i = 0; i < length; i++) {
+            if (listCount[i] === 1) {
+                result[j++] = listArr[i];
+            }
+        }
+    }
+
+    /**
+     * 检查是否是最后一个组合情况
+     * @param listCount
+     * @param selectNum
+     * @returns {boolean}
+     */
+    function checkEnd(listCount, selectNum) {
+        var length = listCount.length,
+            i = length - 1,
+            end = length - selectNum;
+        //console.log('check', listCount);
+        for (i = length - 1; i >= end; i--) {
+            if (listCount[i] !== 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+/**
+ * 利用全排列的思路，先截断后去重
+ * @param listArr
+ * @param selectorNum
+ * @param callback
+ */
+var permutateWithoutAll = function(listArr, selectorNum, callback) {
+    var resultHash = {},
+        result = [],
+        i = 0;
+
+    permutateWithoutTheSame(listArr, 0, function(arr) {
+        var index = arr.slice(0, selectorNum).join(',');
+        resultHash[index] = '';
+    });
+
+    for (var index in resultHash) {
+        if (resultHash.hasOwnProperty(index)) {
+            result[i++] = index.split(',');
+            callback(result[i - 1]);
+        }
+    }
+};
+
+var setRandomArray = function(arr) {
+    for (var i = 0; i < 50; i++) {
+        arr[i] = parseInt(Math.random() * 1000000);
+    }
+};
+var arr = [];
+setRandomArray(arr);
+
+permutate(arr, 0, function() {
+
+});
+/*
+
+permutateWithoutTheSame(arr, 0, function(arr) {
+    /!*console.log(arr.join(''));*!/
+});
+*/
+
+
+
+/*permutateWithoutAll(arr, 2, function(result) {
+/!*
+
+    console.log(result.join(','));
+*!/
+
+});*/
+
+
+combinateWithoutAll(arr, 8, function(result) {
+    //console.log(result);
+    permutateWithoutTheSame(result, 0, function(pResult) {
+        /*console.log(pResult);*/
+    })
 });
