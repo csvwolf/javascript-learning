@@ -42,6 +42,29 @@ var rotate3 = function(nums, k) {
   }
 };
 
+var rotate4 = function(nums, k) {
+  k %= nums.length;
+
+  let count = nums.length;
+
+  let i = 0;
+  let index = i;
+  let nextIndex;
+  let prev = nums[i];
+
+  do {
+    nextIndex = (index + k) % nums.length;
+    [nums[nextIndex], prev] = [prev, nums[nextIndex]];
+    index = nextIndex;
+    count--;
+
+    if (nextIndex === i) {
+      index = ++i;
+      prev = nums[i];
+    }
+  } while (count > 0);
+};
+
 var nums = [1, 2];
 
 rotate2(nums, 0);
