@@ -27,6 +27,21 @@ var rotate2 = function(nums, k) {
   }
 }
 
+var rotate3 = function(nums, k) {
+  k %= nums.length;
+
+  reverse(0, nums.length - k - 1);
+  reverse(nums.length - k, nums.length - 1);
+  reverse(0, nums.length - 1);
+
+  function reverse(s, e) {
+    for (let i = s, count = (e - s + 1) >> 1; count--; i++) {
+      const j = s + e - i;
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+  }
+};
+
 var nums = [1, 2];
 
 rotate2(nums, 0);
