@@ -15,7 +15,7 @@ const replaceSpace = function(str) {
  * 利用一般的方法
  * 这里简单用reduce反向遍历
  * @param  {[String]} str
- * @return {[String]}    
+ * @return {[String]}
  */
 const replaceSpace2 = function(str) {
   let spaceCounter = 0;
@@ -44,4 +44,14 @@ const replaceSpace2 = function(str) {
   return arr.join('');
 }
 
-console.log(replaceSpace2('Hello World'));
+/**
+ * 函数式的方法非常短
+ * @author yhaoao
+ * @param  {[String]} str 
+ * @return {[String]}
+ */
+const replaceSpace3 = function(str) {
+  return [...str].map(char => char === ' ' ? '%20' : char).join('');
+}
+
+console.log(replaceSpace3('Hello World'));
