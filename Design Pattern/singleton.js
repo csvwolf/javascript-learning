@@ -27,6 +27,8 @@ console.log(a === b); // true
 
 /**
  * ES6的写法
+ *
+ * 不透明：意思是必须知道他是单例类，去请求getInstance返回
  */
 class Singleton2 {
   constructor(name) {
@@ -74,5 +76,61 @@ class Singleton3 {
 
 const e = Singleton3.getInstance('sven1');
 const f = Singleton3.getInstance('sven2');
-
 console.log(e === f);
+
+/**
+ * 虽然透明但违背了单一职责
+ */
+const Singleton4 = (function() {
+  let instance;
+
+  class Singleton {
+    constructor(html) {
+      if (instance) {
+        return instance;
+      }
+      this.html = html;
+      this.init();
+      return instance = this;
+    }
+
+    init() {
+      console.log(this.html, 'initted!');
+    }
+  }
+
+  return Singleton;
+})();
+
+const g = new Singleton4('hello');
+const h = new Singleton4('hi');
+console.log(g === h);
+
+/**
+ * 使用代理模式来实现单例
+ */
+class Singleton5 {
+  constructor(html) {
+    this.html = html;
+    this.init();
+  }
+
+  init() {
+    console.log('initted!');
+  }
+}
+const ProxySingleton = (function() {
+  let instance;
+
+  return function(html) {
+    if (!instance) {
+      instance = new Singleton5(html);
+    }
+
+    return instance;
+  }
+})();
+
+const x = new ProxySingleton('sven1');
+const y = new ProxySingleton('sven2');
+console.log(x === y);
