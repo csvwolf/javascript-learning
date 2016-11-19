@@ -3,7 +3,7 @@
  * 
  * Function: Given two non-negative numbers num1 and num2 represented as string, return the sum of num1 and num2.
  * 
- * Numbers of Method:
+ * Numbers of Method: 1
  * 
  * Problem Link: https://leetcode.com/problems/add-strings/ 
  */
